@@ -1,0 +1,24 @@
+# ---------------- stage 1 : build ----------------
+FROM maven:3.8.3-openjdk-17 AS builder
+
+WORKDIR /app
+
+# Copy source code INCLUDING pom.xml
+COPY . .
+
+# Build jar
+RUN mvn clean package -DskipTests
+
+
+# ---------------- stage 2 : runtime ----------------
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy jar from builder
+COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
