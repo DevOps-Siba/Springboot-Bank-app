@@ -5,10 +5,13 @@ metadata:
   namespace: bankapp-namespace
   labels:
     app: mysql
+
 spec:
+  ClusterIP: None
   selector:
     app: mysql
   ports:
   - protocol: TCP
     port: 3306
     targetPort: 3306
+  
